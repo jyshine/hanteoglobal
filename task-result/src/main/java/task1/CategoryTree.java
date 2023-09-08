@@ -1,5 +1,8 @@
 package task1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CategoryTree {
     private Category rootCategory;
 
@@ -37,6 +40,22 @@ public class CategoryTree {
         }
 
         return null;
+    }
+    public List<Category> findCategoriesByCategoryName(Category category, String categoryName) {
+        List<Category> foundCategories = new ArrayList<>();
+
+        if (category.getCategoryName().equals(categoryName)) {
+            foundCategories.add(category);
+        }
+
+        if (null != category.getChildCategory()) {
+            for (Category childCategory : category.getChildCategory().values()) {
+                List<Category> childResults = findCategoriesByCategoryName(childCategory, categoryName);
+                foundCategories.addAll(childResults);
+            }
+        }
+
+        return foundCategories;
     }
     public Category getRootCategory() {
         return rootCategory;

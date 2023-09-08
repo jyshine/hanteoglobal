@@ -2,6 +2,7 @@ package task1;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,4 +48,46 @@ class CategoryTreeTest {
         assertNotNull(blackPinkCategory.getChildCategory());
     }
 
+    @Test
+    public void 카테고리_검색_카테고리번호() {
+        categoryTree.addCategoryTree(null, 1L, "root", null);
+        categoryTree.addCategoryTree(1L, 2L, "남자", null);
+        categoryTree.addCategoryTree(2L, 3L, "엑소", null);
+        categoryTree.addCategoryTree(2L, 4L, "방탄소년단", null);
+
+        Category foundCategory = categoryTree.findCategoryById(categoryTree.getRootCategory(), 3L);
+        assertEquals("엑소", foundCategory.getCategoryName());
+
+        foundCategory = categoryTree.findCategoryById(categoryTree.getRootCategory(), 4L);
+        assertEquals("방탄소년단", foundCategory.getCategoryName());
+
+        foundCategory = categoryTree.findCategoryById(categoryTree.getRootCategory(), 5L);
+        assertNull(foundCategory);
+
+
+    }
+
+    @Test
+    public void 카테고리_검색_카테고리명() {
+        // Add categories to the category tree
+        categoryTree.addCategoryTree(null, 1L, "root", null);
+        categoryTree.addCategoryTree(1L, 2L, "남자", null);
+        categoryTree.addCategoryTree(1L, 3L, "여자", null);
+        categoryTree.addCategoryTree(2L, 4L, "엑소", null);
+        categoryTree.addCategoryTree(2L, 5L, "방탄소년단", null);
+        categoryTree.addCategoryTree(3L, 6L, "공지사항", null);
+        categoryTree.addCategoryTree(3L, 7L, "첸", null);
+        categoryTree.addCategoryTree(4L, 8L, "공지사항", null);
+
+        // Test finding categories by name
+        List<Category> foundCategories = categoryTree.findCategoriesByCategoryName(categoryTree.getRootCategory(), "공지사항");
+        assertEquals(2, foundCategories.size());
+
+        foundCategories = categoryTree.findCategoriesByCategoryName(categoryTree.getRootCategory(), "엑소");
+        assertEquals(1, foundCategories.size());
+        assertEquals("엑소", foundCategories.get(0).getCategoryName());
+
+        foundCategories = categoryTree.findCategoriesByCategoryName(categoryTree.getRootCategory(), "블랙핑크"); // Non-existent name
+        assertEquals(0, foundCategories.size());
+    }
 }
